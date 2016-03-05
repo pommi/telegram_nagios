@@ -27,21 +27,39 @@ def send_notification(token, user_id, message):
 
 
 def host_notification(args):
-    return "%s Host is %s. %s (%s). %s" % (
-        args.notificationtype,
-        args.hoststate,
+    state = ''
+    if args.hoststate == 'UP':
+        state = u'\U00002705 '
+    elif args.hoststate == 'DOWN':
+        state = u'\U0001F525 '
+    elif args.hoststate == 'UNREACHABLE':
+        state = u'\U00002753 '
+
+    return "%s%s (%s) is %s: %s" % (
+        state,
         args.hostname,
         args.hostaddress,
+        args.hoststate,
         args.output,
     )
 
 
 def service_notification(args):
-    return "%s Service is %s. %s/%s. %s" % (
-        args.notificationtype,
-        args.servicestate,
+    state = ''
+    if args.servicestate == 'OK':
+        state = u'\U00002705 '
+    elif args.servicestate == 'WARNING':
+        state = u'\U000026A0 '
+    elif args.servicestate == 'CRITICAL':
+        state = u'\U0001F525 '
+    elif args.servicestate == 'UNKNOWN':
+        state = u'\U00002753 '
+
+    return "%s%s/%s is %s: %s" % (
+        state,
         args.hostalias,
         args.servicedesc,
+        args.servicestate,
         args.output,
     )
 
