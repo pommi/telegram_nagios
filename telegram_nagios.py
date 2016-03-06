@@ -35,11 +35,10 @@ def host_notification(args):
     elif args.hoststate == 'UNREACHABLE':
         state = u'\U00002753 '
 
-    return "%s%s (%s) is %s: %s" % (
+    return "%s%s (%s): %s" % (
         state,
         args.hostname,
         args.hostaddress,
-        args.hoststate,
         args.output,
     )
 
@@ -55,11 +54,10 @@ def service_notification(args):
     elif args.servicestate == 'UNKNOWN':
         state = u'\U00002753 '
 
-    return "%s%s/%s is %s: %s" % (
+    return "%s%s/%s: %s" % (
         state,
         args.hostalias,
         args.servicedesc,
-        args.servicestate,
         args.output,
     )
 
