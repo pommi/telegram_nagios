@@ -14,7 +14,6 @@ def parse_args():
     parser.add_argument('--hostname', nargs='?')
     parser.add_argument('--hostaddress', nargs='?')
     parser.add_argument('--servicestate', nargs='?')
-    parser.add_argument('--hostalias', nargs='?')
     parser.add_argument('--servicedesc', nargs='?')
     parser.add_argument('--output', nargs='?')
     args = parser.parse_args()
@@ -56,7 +55,7 @@ def service_notification(args):
 
     return "%s%s/%s: %s" % (
         state,
-        args.hostalias,
+        args.hostname,
         args.servicedesc,
         args.output,
     )
