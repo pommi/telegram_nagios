@@ -16,6 +16,8 @@ def parse_args():
     parser.add_argument('--servicestate', nargs='?')
     parser.add_argument('--servicedesc', nargs='?')
     parser.add_argument('--output', nargs='?')
+    parser.add_argument('--author', nargs='?')
+    parser.add_argument('--comment', nargs='?')
     args = parser.parse_args()
     return args
 
@@ -27,6 +29,7 @@ def send_notification(token, user_id, message):
 
 def host_notification(args):
     state = ''
+    notification = ''
     if args.hoststate == 'UP':
         state = u'\U00002705 '
     elif args.hoststate == 'DOWN':
@@ -34,16 +37,33 @@ def host_notification(args):
     elif args.hoststate == 'UNREACHABLE':
         state = u'\U00002753 '
 
-    return "%s%s (%s): %s" % (
-        state,
-        args.hostname,
-        args.hostaddress,
-        args.output,
-    )
-
+    if args.notificationtype in ['DOWNTIMESTART',
+                                 'DOWNTIMEEND',
+                                 'ACKNOWLEDGEMENT',
+                                 'CUSTOM']:
+        state = u'\U0001F4AC '
+        notification = "%s%s %s by %s - %s (%s): %s" % (
+            state,
+            args.notificationtype,
+            args.comment,
+            args.author,
+            args.hostname,
+            args.hostaddress,
+            args.output,
+        )
+    else:
+        notification = "%s%s %s (%s): %s" % (
+            state,
+            args.notificationtype,
+            args.hostname,
+            args.hostaddress,
+            args.output,
+        )
+    return notification
 
 def service_notification(args):
     state = ''
+    notification = ''
     if args.servicestate == 'OK':
         state = u'\U00002705 '
     elif args.servicestate == 'WARNING':
@@ -53,13 +73,29 @@ def service_notification(args):
     elif args.servicestate == 'UNKNOWN':
         state = u'\U00002753 '
 
-    return "%s%s/%s: %s" % (
-        state,
-        args.hostname,
-        args.servicedesc,
-        args.output,
-    )
-
+    if args.notificationtype in ['DOWNTIMESTART',
+                                 'DOWNTIMEEND',
+                                 'ACKNOWLEDGEMENT',
+                                 'CUSTOM']:
+        state = u'\U0001F4AC '
+        notification = "%s%s %s by %s - %s/%s: %s" % (
+            state,
+            args.notificationtype,
+            args.comment,
+            args.author,
+            args.hostname,
+            args.servicedesc,
+            args.output,
+        )
+    else:
+        notification = "%s%s %s/%s: %s" % (
+            state,
+            args.notificationtype,
+            args.hostname,
+            args.servicedesc,
+            args.output,
+        )
+    return notification
 
 def main():
     args = parse_args()
